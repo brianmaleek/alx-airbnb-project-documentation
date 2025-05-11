@@ -1,0 +1,33 @@
+# Airbnb Clone Backend: Guest Booking Flow
+
+This document outlines the backend flow for a guest searching for and booking a property on the Airbnb Clone platform. The process is visualized using a Mermaid flowchart below.
+
+## Guest Booking Flow
+
+```mermaid
+flowchart TD
+    Start([Start]) --> SearchForm[User Enters Search Criteria]
+    SearchForm --> QueryDB[Query Property Database]
+    QueryDB --> FilterResults[Filter Available Properties]
+    FilterResults --> DisplayResults[Display Search Results]
+
+    DisplayResults --> SelectProperty[User Selects Property]
+    SelectProperty --> CheckAvailable{Check Availability}
+
+    CheckAvailable -->|Available| InitBooking[Initialize Booking]
+    CheckAvailable -->|Not Available| DisplayResults
+
+    InitBooking --> ValidateDates{Validate Dates}
+    ValidateDates -->|Valid| CalculatePrice[Calculate Total Price]
+    ValidateDates -->|Invalid| SelectProperty
+
+    CalculatePrice --> InitPayment[Initialize Payment]
+    InitPayment --> ProcessPayment{Process Payment}
+
+    ProcessPayment -->|Success| CreateBooking[Create Booking Record]
+    ProcessPayment -->|Failure| RetryPayment[Show Payment Error]
+    RetryPayment --> InitPayment
+
+    CreateBooking --> UpdateAvailability[Update Property Availability]
+    UpdateAvailability --> SendNotifications[Send Notifications]
+    SendNotifications --> End([End])
